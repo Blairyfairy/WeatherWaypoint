@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -9,14 +10,13 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 
 body{
 font-family:'Poppins',sans-serif;
 margin:0;
-padding:0;
 }
 
 header{
@@ -32,14 +32,14 @@ header h1{
 margin:0;
 font-size:2em;
 display:flex;
-align-items:center;
 gap:10px;
+align-items:center;
 }
 
 .city-input{
 margin-top:10px;
 display:flex;
-gap:5px;
+gap:6px;
 }
 
 .city-input input{
@@ -50,11 +50,12 @@ width:200px;
 }
 
 .city-input button{
-padding:8px 12px;
+padding:8px 14px;
 border:none;
 border-radius:5px;
 background:#FFD93D;
 cursor:pointer;
+font-weight:600;
 }
 
 #map{
@@ -65,9 +66,7 @@ width:100%;
 #weatherInfo{
 padding:15px;
 background:#f4f4f4;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
-position:relative;
-z-index:100;
+box-shadow:0 0 10px rgba(0,0,0,.2);
 max-width:400px;
 margin:15px auto;
 border-radius:8px;
@@ -86,13 +85,12 @@ display:none;
 <header>
 
 <h1>
-WeatherWaypoints
-<span>☁️📍</span>
+WeatherWaypoints ☁️📍
 </h1>
 
 <div class="city-input">
 
-<input id="cityInput" type="text" placeholder="Enter city name...">
+<input id="cityInput" placeholder="Enter city...">
 
 <button id="fetchWeatherBtn">Check Weather</button>
 
@@ -109,186 +107,7 @@ WeatherWaypoints
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-const API_KEY="c2a931ceedf52ecf1b790639073ea4ee";
-
-let map;
-
-/* SVG WEATHER ICONS */
-
-const weatherIcons={
-
-Clear:`<svg viewBox="0 0 64 64" width="50"><circle cx="32" cy="32" r="14" fill="#F5A623"/></svg>`,
-
-Clouds:`<svg viewBox="0 0 64 64" width="50"><ellipse cx="32" cy="36" rx="20" ry="12" fill="#BDC3C7"/></svg>`,
-
-Rain:`<svg viewBox="0 0 64 64" width="50">
-<ellipse cx="32" cy="30" rx="20" ry="12" fill="#BDC3C7"/>
-<line x1="22" y1="45" x2="22" y2="55" stroke="#3498DB" stroke-width="3"/>
-<line x1="32" y1="45" x2="32" y2="55" stroke="#3498DB" stroke-width="3"/>
-<line x1="42" y1="45" x2="42" y2="55" stroke="#3498DB" stroke-width="3"/>
-</svg>`,
-
-Snow:`<svg viewBox="0 0 64 64" width="50">
-<ellipse cx="32" cy="30" rx="20" ry="12" fill="#BDC3C7"/>
-<text x="32" y="50" text-anchor="middle" fill="#3498DB" font-size="20">*</text>
-</svg>`
-
-};
-
-
-/* INITIAL CITY LIST */
-
-const cities=[
-
-{name:"New York",lat:40.7128,lng:-74.0060},
-{name:"Los Angeles",lat:34.0522,lng:-118.2437},
-{name:"Chicago",lat:41.8781,lng:-87.6298},
-{name:"Atlanta",lat:33.7490,lng:-84.3880},
-{name:"Dallas",lat:32.7767,lng:-96.7970},
-{name:"London",lat:51.5074,lng:-0.1278},
-{name:"Paris",lat:48.8566,lng:2.3522},
-{name:"Tokyo",lat:35.6762,lng:139.6503},
-{name:"Dubai",lat:25.2048,lng:55.2708},
-{name:"Las Vegas",lat:36.1699,lng:-115.1398}
-
-];
-
-
-/* MAP INIT */
-
-function initMap(){
-
-map=L.map("map").setView([20,0],2);
-
-L.tileLayer(
-
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
-{attribution:"© OpenStreetMap"}
-
-).addTo(map);
-
-cities.forEach(city=>{
-
-const marker=L.circleMarker(
-
-[city.lat,city.lng],
-
-{
-
-radius:8,
-color:"#fff",
-fillColor:getRandomColor(),
-fillOpacity:1,
-weight:2
-
-}
-
-).addTo(map);
-
-marker.on("click",()=>fetchWeather(city.name));
-
-});
-
-}
-
-
-function getRandomColor(){
-
-const colors=["#FF6B6B","#4ECDC4","#FFD93D","#6A4C93","#F5A623"];
-
-return colors[Math.floor(Math.random()*colors.length)];
-
-}
-
-
-/* FIND CITY */
-
-function findClosestCity(input){
-
-input=input.toLowerCase().trim();
-
-const exact=cities.find(c=>c.name.toLowerCase().includes(input));
-
-if(exact) return exact;
-
-return cities[0];
-
-}
-
-
-/* WEATHER FETCH */
-
-async function fetchWeather(cityName){
-
-const cityObj=findClosestCity(cityName);
-
-map.setView([cityObj.lat,cityObj.lng],6);
-
-try{
-
-const res=await fetch(
-
-`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cityObj.name)}&units=imperial&appid=${API_KEY}`
-
-);
-
-const data=await res.json();
-
-if(data.cod!==200) throw new Error();
-
-const iconSVG=weatherIcons[data.weather[0].main] || weatherIcons.Clear;
-
-const weatherDiv=document.getElementById("weatherInfo");
-
-weatherDiv.innerHTML=`
-
-<h2>Weather in ${data.name}</h2>
-
-${iconSVG}
-
-<p>Temperature: ${data.main.temp.toFixed(1)} °F</p>
-
-<p>Humidity: ${data.main.humidity}%</p>
-
-<p>${data.weather[0].description}</p>
-
-`;
-
-weatherDiv.classList.remove("hidden");
-
-weatherDiv.scrollIntoView({behavior:"smooth"});
-
-}catch(e){
-
-alert("Weather data fetch failed");
-
-}
-
-}
-
-
-/* BUTTON EVENT */
-
-document.getElementById("fetchWeatherBtn").addEventListener("click",()=>{
-
-const city=document.getElementById("cityInput").value;
-
-if(city) fetchWeather(city);
-
-});
-
-
-initMap();
-
-});
-
-</script>
+<script src="script.js" defer></script>
 
 </body>
 </html>
