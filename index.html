@@ -9,15 +9,14 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
-body{
+body {
   font-family:'Poppins',sans-serif;
   margin:0;
   background:#f5f7fa;
 }
-
 /* HEADER */
-header{
-  background:linear-gradient(90deg,#3498db,#2ecc71);
+header {
+  background: linear-gradient(90deg,#3498db,#2ecc71);
   padding:16px 28px;
   color:white;
 }
@@ -34,9 +33,10 @@ header{
   display:flex;
   align-items:center;
   gap:8px;
+  cursor:pointer;
+  transition: transform 0.3s ease;
 }
-
-/* SEARCH */
+.logo:hover { transform: scale(1.05) rotate(-2deg);}
 .city-input{
   display:flex;
   gap:6px;
@@ -46,7 +46,9 @@ header{
   border-radius:5px;
   border:none;
   width:200px;
+  transition: box-shadow 0.3s ease;
 }
+.city-input input:focus{ box-shadow:0 0 10px #FFD93D; outline:none;}
 .city-input button{
   padding:8px 14px;
   border:none;
@@ -54,7 +56,9 @@ header{
   background:#FFD93D;
   cursor:pointer;
   font-weight:600;
+  transition: transform 0.2s ease;
 }
+.city-input button:hover{ transform: scale(1.05);}
 
 /* MAP */
 #map{
@@ -67,16 +71,26 @@ header{
 #weatherInfo{
   padding:15px;
   background:white;
-  box-shadow:0 4px 12px rgba(0,0,0,.2);
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
   max-width:420px;
-  margin:0 auto 0 auto;
-  border-radius:8px;
+  margin:0 auto;
+  border-radius:12px;
   text-align:center;
+  transform: translateY(-20px);
+  opacity:0;
+  transition: all 0.5s ease;
+}
+#weatherInfo.show{
+  transform: translateY(0);
+  opacity:1;
+}
+#weatherInfo svg{
+  margin-bottom:10px;
 }
 
 /* FOOTER */
 footer{
-  background:#0a2540;
+  background: linear-gradient(135deg,#0a2540,#102e56);
   color:#d0d8e5;
   padding:40px 20px 20px 20px;
 }
@@ -97,12 +111,17 @@ footer{
 }
 .footer-icons{
   display:flex;
-  gap:12px;
+  gap:20px;
   margin-top:10px;
 }
 .footer-icons svg{
   width:30px;
   height:30px;
+  transition: transform 0.5s ease;
+  cursor:pointer;
+}
+.footer-icons svg:hover{
+  transform: rotate(360deg) scale(1.2);
 }
 .footer-bottom{
   text-align:center;
@@ -110,70 +129,70 @@ footer{
   font-size:.85em;
   color:#8fa6c0;
 }
-
+@media (max-width:600px){
+  .header-container{
+    flex-direction:column;
+    gap:10px;
+  }
+  .city-input input{width:100%;}
+}
 </style>
 </head>
-<body>
 
+<body>
 <header>
-<div class="header-container">
-  <div class="logo">WeatherWaypoint ☁️📍</div>
-  <div class="city-input">
-    <input type="text" id="cityInput" placeholder="Search city...">
-    <button id="fetchWeatherBtn">Check Weather</button>
+  <div class="header-container">
+    <div class="logo">WeatherWaypoint ☁️📍</div>
+    <div class="city-input">
+      <input type="text" id="cityInput" placeholder="Search city...">
+      <button id="fetchWeatherBtn">Check Weather</button>
+    </div>
   </div>
-</div>
 </header>
 
 <main>
-<div id="map"></div>
-<div id="weatherInfo" class="hidden"></div>
+  <div id="map"></div>
+  <div id="weatherInfo" class="hidden"></div>
 </main>
 
 <footer>
-<div class="footer-container">
-  <div class="footer-section">
-    <h3>About WeatherWaypoint</h3>
-    <p>
-      WeatherWaypoint lets users explore live weather conditions by clicking cities on the map or searching by name. It uses modern front-end techniques with APIs and interactive maps.
-    </p>
-    <div class="footer-icons">
-      <!-- Globe icon -->
-      <svg fill="#4fc3f7" viewBox="0 0 24 24">
-        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V21h-2v-1.07a8.05 8.05 0 0 1-5.66-5.66H7v-2h1.34a8.05 8.05 0 0 1 5.66-5.66V3h2v1.07a8.05 8.05 0 0 1 5.66 5.66H17v2h1.34a8.05 8.05 0 0 1-5.66 5.66z"/>
-      </svg>
-      <!-- Cloud icon -->
-      <svg fill="#ffd54f" viewBox="0 0 24 24">
-        <path d="M19 18H6a4 4 0 0 1 0-8 5 5 0 0 1 9.9 1A4.5 4.5 0 0 1 19 18z"/>
-      </svg>
-      <!-- Lightning icon -->
-      <svg fill="#81c784" viewBox="0 0 24 24">
-        <path d="M13 2L3 14h7v8l10-12h-7z"/>
-      </svg>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>About WeatherWaypoint</h3>
+      <p>
+        Explore live weather worldwide. Click cities or search by name to see temperature, humidity, and conditions. Built with modern JS, Leaflet, and OpenWeatherMap API.
+      </p>
+      <div class="footer-icons">
+        <!-- Globe for Map -->
+        <svg fill="#4fc3f7" viewBox="0 0 24 24" title="Map"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V21h-2v-1.07a8.05 8.05 0 0 1-5.66-5.66H7v-2h1.34a8.05 8.05 0 0 1 5.66-5.66V3h2v1.07a8.05 8.05 0 0 1 5.66 5.66H17v2h1.34a8.05 8.05 0 0 1-5.66 5.66z"/></svg>
+        <!-- Cloud for Weather -->
+        <svg fill="#ffd54f" viewBox="0 0 24 24" title="Weather"><path d="M19 18H6a4 4 0 0 1 0-8 5 5 0 0 1 9.9 1A4.5 4.5 0 0 1 19 18z"/></svg>
+        <!-- Lightning for live updates -->
+        <svg fill="#81c784" viewBox="0 0 24 24" title="Live Updates"><path d="M13 2L3 14h7v8l10-12h-7z"/></svg>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>How to Use</h3>
+      <p>
+        • Type city & click <strong>Check Weather</strong><br>
+        • Click map markers for instant weather<br>
+        • Toggle °F / °C (future feature)<br>
+        • Mobile-friendly & responsive
+      </p>
+    </div>
+
+    <div class="footer-section">
+      <h3>Technology Used</h3>
+      <p>
+        • OpenWeatherMap API<br>
+        • Leaflet.js for interactive maps<br>
+        • HTML / CSS / JavaScript<br>
+        • OpenStreetMap tiles
+      </p>
     </div>
   </div>
-
-  <div class="footer-section">
-    <h3>How to Use</h3>
-    <p>
-      • Type a city and click <strong>Check Weather</strong>.<br>
-      • Click markers on the map to see weather info.<br>
-      • Real-time temperature, humidity, and conditions appear instantly.
-    </p>
-  </div>
-
-  <div class="footer-section">
-    <h3>Technology Used</h3>
-    <p>
-      • OpenWeatherMap API for weather<br>
-      • Leaflet.js for interactive maps<br>
-      • HTML, CSS, JavaScript<br>
-      • OpenStreetMap tiles
-    </p>
-  </div>
-</div>
-
-<div class="footer-bottom">2026 WeatherPoint</div>
+  <div class="footer-bottom">2026 WeatherPoint</div>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
