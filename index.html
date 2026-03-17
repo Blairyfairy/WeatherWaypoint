@@ -1,24 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>WeatherWaypoints</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <header>
-<h1>WeatherWaypoints ☁️📍</h1>
+
+<div class="header-container">
+
+<h1 class="logo">
+WeatherWaypoints ☁️📍
+</h1>
 
 <div class="city-input">
+
 <input id="cityInput" type="text" placeholder="Enter city name">
+
 <button id="fetchWeatherBtn">Check Weather</button>
+
+</div>
+
 </div>
 
 </header>
@@ -32,7 +47,8 @@
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="script.js"></script>
+
+<script src="script.js" defer></script>
 
 </body>
 </html>
