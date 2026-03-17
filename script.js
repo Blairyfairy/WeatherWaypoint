@@ -1,7 +1,7 @@
 const API_KEY = 'YOUR_OPENWEATHERMAP_API_KEY'; // Replace with your OpenWeatherMap key
 let map;
 
-// Major global city airport hubs
+// Major global airport hubs
 const cities = [
   { name: "New York, USA", lat: 40.7128, lng: -74.0060 },
   { name: "Los Angeles, USA", lat: 34.0522, lng: -118.2437 },
@@ -38,20 +38,17 @@ const cities = [
   { name: "Mumbai, India", lat: 19.0760, lng: 72.8777 },
   { name: "Delhi, India", lat: 28.7041, lng: 77.1025 },
   { name: "Doha, Qatar", lat: 25.2854, lng: 51.5310 },
-  { name: "Los Angeles, USA", lat: 34.0522, lng: -118.2437 },
   { name: "Las Vegas, USA", lat: 36.1699, lng: -115.1398 }
-  // Add more major airport hub cities to reach 50+ if needed
 ];
 
-// Initialize map
+// Map initialization
 function initMap() {
-  map = L.map('map').setView([20,0], 2); // Center of world
+  map = L.map('map').setView([20,0], 2); // Center global view
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
-  // Add markers
   cities.forEach(city => {
     const marker = L.circleMarker([city.lat, city.lng], {
       radius: 8,
@@ -61,22 +58,54 @@ function initMap() {
       weight: 2
     }).addTo(map);
 
-    marker.on('click', () => fetchWeather(city.name));
+    marker.on('click', () => {
+      fetchWeather(city.name);
+      map.setView([city.lat, city.lng], 6);
+    });
   });
 }
 
-// Random pastel marker colors
+// Random pastel colors
 function getRandomColor() {
   const colors = ['#FF6B6B','#4ECDC4','#FFD93D','#6A4C93','#F5A623'];
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-// Fetch weather info
-async function fetchWeather(city) {
+// Calculate distance between two coordinates
+function distance(lat1, lng1, lat2, lng2) {
+  const R = 6371; // km
+  const dLat = (lat2-lat1)*Math.PI/180;
+  const dLng = (lng2-lng1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R*c;
+}
+
+// Find closest city from input
+function findClosestCity(inputCity) {
+  inputCity = inputCity.toLowerCase().trim();
+  // Try exact match first
+  let exact = cities.find(c => c.name.toLowerCase().includes(inputCity));
+  if(exact) return exact;
+
+  // Otherwise pick the first city starting with same letters
+  return cities.find(c => c.name.toLowerCase().startsWith(inputCity)) || cities[0];
+}
+
+// Fetch weather data
+async function fetchWeather(cityName) {
+  const cityObj = findClosestCity(cityName);
+  if(!cityObj) {
+    alert("City not found in our list.");
+    return;
+  }
+
+  map.setView([cityObj.lat, cityObj.lng], 6); // Zoom to city
+
   try {
-    const cleanedCity = city.split(',')[0].trim();
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cleanedCity)}&appid=${API_KEY}&units=imperial`);
-    const data = await response.json();
+    const cleanedCity = cityObj.name.split(',')[0].trim();
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cleanedCity)}&appid=${API_KEY}&units=imperial`);
+    const data = await res.json();
     if(data.cod !== 200) throw new Error(data.message);
 
     const iconSVG = weatherIcons[data.weather[0].main] || weatherIcons['Clear'];
@@ -91,7 +120,7 @@ async function fetchWeather(city) {
     weatherDiv.classList.remove('hidden');
     weatherDiv.scrollIntoView({ behavior: 'smooth' });
   } catch(err) {
-    alert("City not found or invalid input.");
+    alert("Weather data fetch failed.");
   }
 }
 
