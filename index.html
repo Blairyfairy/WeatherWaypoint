@@ -10,7 +10,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <link rel="stylesheet" href="style.css">
 
@@ -20,17 +20,17 @@
 
 <header>
 
-<div class="header-container">
+<div class="header-wrapper">
 
-<h1 class="logo">
+<div class="logo">
 WeatherWaypoints ☁️📍
-</h1>
+</div>
 
-<div class="city-input">
+<div class="search-bar">
 
-<input id="cityInput" type="text" placeholder="Enter city name">
+<input id="cityInput" type="text" placeholder="Search a city...">
 
-<button id="fetchWeatherBtn">Check Weather</button>
+<button id="searchBtn">Search</button>
 
 </div>
 
@@ -42,7 +42,7 @@ WeatherWaypoints ☁️📍
 
 <div id="map"></div>
 
-<div id="weatherInfo" class="hidden"></div>
+<div id="weatherPanel" class="hidden"></div>
 
 </main>
 
