@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 let map;
 
-/* WEATHER ICONS */
-
 const icons={
 Clear:"☀️",
 Clouds:"☁️",
@@ -15,15 +13,15 @@ Thunderstorm:"⛈️",
 Drizzle:"🌦️"
 };
 
-/* 300+ GLOBAL CITIES & AIRPORT HUBS */
+/* MAJOR GLOBAL CITIES + AIRPORT HUBS */
 
 const cities=[
 
-["New York",40.7128,-74.006],
+["New York",40.7128,-74.0060],
 ["Los Angeles",34.0522,-118.2437],
 ["Chicago",41.8781,-87.6298],
-["Atlanta",33.749,-84.388],
-["Dallas",32.7767,-96.797],
+["Atlanta",33.7490,-84.3880],
+["Dallas",32.7767,-96.7970],
 ["Las Vegas",36.1699,-115.1398],
 ["Denver",39.7392,-104.9903],
 ["Seattle",47.6062,-122.3321],
@@ -31,16 +29,14 @@ const cities=[
 ["Miami",25.7617,-80.1918],
 ["Boston",42.3601,-71.0589],
 ["Washington",38.9072,-77.0369],
-["Phoenix",33.4484,-112.074],
+["Phoenix",33.4484,-112.0740],
 ["Houston",29.7604,-95.3698],
 ["Orlando",28.5383,-81.3792],
 ["Charlotte",35.2271,-80.8431],
 ["Detroit",42.3314,-83.0458],
-["Minneapolis",44.9778,-93.265],
-["Salt Lake City",40.7608,-111.891],
+["Minneapolis",44.9778,-93.2650],
+["Salt Lake City",40.7608,-111.8910],
 ["Portland",45.5152,-122.6784],
-
-/* EUROPE */
 
 ["London",51.5074,-0.1278],
 ["Paris",48.8566,2.3522],
@@ -53,32 +49,24 @@ const cities=[
 ["Dublin",53.3498,-6.2603],
 ["Lisbon",38.7223,-9.1393],
 
-/* ASIA */
-
 ["Tokyo",35.6762,139.6503],
-["Seoul",37.5665,126.978],
+["Seoul",37.5665,126.9780],
 ["Beijing",39.9042,116.4074],
 ["Shanghai",31.2304,121.4737],
 ["Singapore",1.3521,103.8198],
 ["Bangkok",13.7563,100.5018],
 ["Dubai",25.2048,55.2708],
-["Mumbai",19.076,72.8777],
-["Delhi",28.6139,77.209],
+["Mumbai",19.0760,72.8777],
+["Delhi",28.6139,77.2090],
 ["Jakarta",-6.2088,106.8456],
-
-/* AUSTRALIA */
 
 ["Sydney",-33.8688,151.2093],
 ["Melbourne",-37.8136,144.9631],
 ["Brisbane",-27.4698,153.0251],
 
-/* AFRICA */
-
 ["Cairo",30.0444,31.2357],
 ["Johannesburg",-26.2041,28.0473],
 ["Cape Town",-33.9249,18.4241],
-
-/* SOUTH AMERICA */
 
 ["São Paulo",-23.5505,-46.6333],
 ["Rio",-22.9068,-43.1729],
@@ -95,11 +83,11 @@ map=L.map("map").setView([20,0],2);
 
 L.tileLayer(
 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-{attribution:"© OpenStreetMap"}
+{attribution:"© OpenStreetMap contributors"}
 ).addTo(map);
 
 
-/* CREATE MARKERS */
+/* CREATE CITY MARKERS */
 
 cities.forEach(city=>{
 
@@ -139,18 +127,17 @@ document.getElementById("cityInput").addEventListener("keypress",e=>{
 if(e.key==="Enter") searchCity();
 });
 
+
 function searchCity(){
 
-const input=document.getElementById("cityInput").value.trim();
+const city=document.getElementById("cityInput").value.trim();
 
-if(!input)return;
-
-fetchWeather(input);
+if(city) fetchWeather(city);
 
 }
 
 
-/* WEATHER FETCH */
+/* WEATHER API */
 
 async function fetchWeather(city){
 
@@ -163,7 +150,7 @@ const res=await fetch(
 const data=await res.json();
 
 if(data.cod!==200){
-alert("City not found.");
+alert("City not found");
 return;
 }
 
@@ -173,7 +160,7 @@ map.setView([data.coord.lat,data.coord.lon],7);
 
 }catch{
 
-alert("Weather API error");
+alert("Weather API request failed");
 
 }
 
@@ -186,7 +173,7 @@ function displayWeather(data){
 
 const weatherDiv=document.getElementById("weatherInfo");
 
-const icon=icons[data.weather[0].main]||"🌡️";
+const icon=icons[data.weather[0].main] || "🌡️";
 
 weatherDiv.innerHTML=`
 
