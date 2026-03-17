@@ -1,16 +1,14 @@
-const API_KEY = 'YOUR_OPENWEATHERMAP_API_KEY'; // Replace with your OpenWeatherMap key
+const API_KEY = 'YOUR_OPENWEATHERMAP_API_KEY'; // Free OpenWeatherMap API key
 let map;
 
-function getRandomColor() {
-  const colors = ['#FF6B6B','#4ECDC4','#FFD93D','#6A4C93','#F5A623'];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
+// Initialize Leaflet map
 function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: 39.8283, lng: -98.5795 },
-    zoom: 4,
-  });
+  map = L.map('map').setView([39.8283, -98.5795], 4); // Center on USA
+
+  // OpenStreetMap tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
   const locations = [
     { name: "Statue of Liberty", lat: 40.6892, lng: -74.0445 },
@@ -19,25 +17,25 @@ function initMap() {
   ];
 
   locations.forEach(loc => {
-    const marker = new google.maps.Marker({
-      position: { lat: loc.lat, lng: loc.lng },
-      map: map,
-      title: loc.name,
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: 10,
-        fillColor: getRandomColor(),
-        fillOpacity: 1,
-        strokeWeight: 1,
-        strokeColor: '#fff'
-      },
-      animation: google.maps.Animation.DROP
-    });
+    const marker = L.circleMarker([loc.lat, loc.lng], {
+      radius: 10,
+      color: '#fff',
+      fillColor: getRandomColor(),
+      fillOpacity: 1,
+      weight: 2
+    }).addTo(map);
 
-    marker.addListener("click", () => fetchWeather(loc.name));
+    marker.on('click', () => fetchWeather(loc.name));
   });
 }
 
+// Random pastel colors for markers
+function getRandomColor() {
+  const colors = ['#FF6B6B','#4ECDC4','#FFD93D','#6A4C93','#F5A623'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// Fetch weather from OpenWeatherMap
 async function fetchWeather(city) {
   try {
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=imperial`);
@@ -54,7 +52,7 @@ async function fetchWeather(city) {
       <p>${data.weather[0].description}</p>
     `;
     weatherDiv.classList.remove('hidden');
-  } catch (err) {
+  } catch(err) {
     alert(err.message);
   }
 }
