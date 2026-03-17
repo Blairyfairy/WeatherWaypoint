@@ -5,45 +5,71 @@ padding:0;
 background:#f7f7f7;
 }
 
+/* HEADER */
+
 header{
 background:linear-gradient(90deg,#6A4C93,#4ECDC4);
 padding:20px;
 color:white;
-text-align:center;
 }
 
+/* FLEX HEADER LAYOUT */
+
+.header-container{
+display:flex;
+justify-content:space-between;
+align-items:center;
+max-width:1200px;
+margin:auto;
+}
+
+/* LOGO */
+
+.logo{
+margin:0;
+font-size:1.8rem;
+font-weight:600;
+}
+
+/* SEARCH AREA */
+
 .city-input{
-margin-top:10px;
+display:flex;
+gap:8px;
 }
 
 .city-input input{
-padding:8px;
-border-radius:5px;
+padding:8px 10px;
+border-radius:6px;
 border:none;
-width:200px;
+width:220px;
 }
 
 .city-input button{
-padding:8px 12px;
+padding:8px 14px;
 border:none;
-border-radius:5px;
+border-radius:6px;
 background:#FFD93D;
 font-weight:600;
 cursor:pointer;
 }
+
+/* MAP */
 
 #map{
 height:70vh;
 width:100%;
 }
 
+/* WEATHER CARD */
+
 #weatherInfo{
 padding:20px;
 background:white;
 margin:20px auto;
 max-width:400px;
-border-radius:8px;
-box-shadow:0 0 10px rgba(0,0,0,.2);
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,.15);
 text-align:center;
 }
 
