@@ -1,91 +1,64 @@
-/* General */
 body {
-  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: #F2F2F2;
+  margin: 0;
+  padding: 0;
 }
 
-/* Header */
 header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #4A90E2, #50E3C2);
+  background: linear-gradient(90deg,#6A4C93,#4ECDC4);
+  padding: 20px;
   color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 header h1 {
-  font-weight: 600;
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 2em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .city-input {
+  margin-top: 10px;
   display: flex;
-  gap: 10px;
-  margin-top: 5px;
+  gap: 5px;
 }
 
-header input {
+.city-input input {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  width: 200px;
+}
+
+.city-input button {
   padding: 8px 12px;
-  font-size: 16px;
-  border-radius: 5px;
   border: none;
-  outline: none;
-}
-
-header button {
-  padding: 8px 15px;
   border-radius: 5px;
-  border: none;
-  background: #F5A623;
-  color: white;
-  font-weight: 600;
+  background: #FFD93D;
   cursor: pointer;
-  transition: all 0.3s ease;
+  font-weight: 600;
 }
 
-header button:hover {
-  background: #f39c12;
-}
-
-/* Map */
 #map {
+  height: 70vh;
   width: 100%;
-  height: 75vh;
-  margin: 10px 0;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* Weather Info Popup */
 #weatherInfo {
-  padding: 20px;
-  background: white;
-  width: 90%;
-  max-width: 500px;
-  margin: -60px auto 20px auto;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  animation: slideUp 0.5s ease forwards;
+  padding: 15px;
+  background: #f4f4f4;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 100;
+  max-width: 400px;
+  margin: 15px auto;
+  border-radius: 8px;
 }
 
 .hidden {
   display: none;
-}
-
-#weatherInfo svg {
-  width: 60px;
-  height: 60px;
-  margin: 10px 0;
-}
-
-/* Slide Animation */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
 }
