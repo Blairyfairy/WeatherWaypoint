@@ -1,21 +1,18 @@
 body{
-font-family:Poppins, sans-serif;
 margin:0;
-padding:0;
-background:#f7f7f7;
+font-family:Poppins, sans-serif;
+background:#f4f7fb;
 }
 
 /* HEADER */
 
 header{
-background:linear-gradient(90deg,#6A4C93,#4ECDC4);
-padding:20px;
+background:linear-gradient(90deg,#3498db,#2ecc71);
+padding:18px 30px;
 color:white;
 }
 
-/* FLEX HEADER LAYOUT */
-
-.header-container{
+.header-wrapper{
 display:flex;
 justify-content:space-between;
 align-items:center;
@@ -23,33 +20,30 @@ max-width:1200px;
 margin:auto;
 }
 
-/* LOGO */
-
 .logo{
-margin:0;
-font-size:1.8rem;
+font-size:22px;
 font-weight:600;
 }
 
-/* SEARCH AREA */
+/* SEARCH */
 
-.city-input{
+.search-bar{
 display:flex;
 gap:8px;
 }
 
-.city-input input{
-padding:8px 10px;
+.search-bar input{
+padding:9px 12px;
 border-radius:6px;
 border:none;
 width:220px;
 }
 
-.city-input button{
-padding:8px 14px;
+.search-bar button{
+padding:9px 14px;
 border:none;
 border-radius:6px;
-background:#FFD93D;
+background:#ffffff;
 font-weight:600;
 cursor:pointer;
 }
@@ -61,18 +55,32 @@ height:70vh;
 width:100%;
 }
 
-/* WEATHER CARD */
+/* WEATHER PANEL */
 
-#weatherInfo{
-padding:20px;
-background:white;
+#weatherPanel{
+
+max-width:420px;
 margin:20px auto;
-max-width:400px;
+
+background:white;
+
+padding:20px;
+
 border-radius:10px;
-box-shadow:0 4px 12px rgba(0,0,0,.15);
+
+box-shadow:0 6px 18px rgba(0,0,0,0.15);
+
 text-align:center;
+
 }
 
 .hidden{
 display:none;
+}
+
+/* WEATHER ICON */
+
+.weatherIcon{
+font-size:48px;
+margin:10px 0;
 }
